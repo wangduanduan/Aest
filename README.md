@@ -8,6 +8,8 @@ Api Test Tool, Power By jest, Axiox, superstruct...
 
 # Usage
 
+`write test config file`
+
 ```
 module.exports = {
   $baseUrl: 'http://localhost',
@@ -17,7 +19,7 @@ module.exports = {
       method: 'post',
       path: '/p/api/security/loginByEmail',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
-      data: 'email=zhen01@126.com&password={{password}}',
+      data: 'email=test@test.com&password={{password}}',
       params: {
         _test: 1
       }
@@ -52,6 +54,8 @@ module.exports = {
 
 ```
 
+`write test case`
+
 ```
 const Aest = require('Aest')
 var testData = require('./test-data.js')
@@ -71,4 +75,27 @@ test('Get User Info', async () => {
   await Aest.send(testData.session, {sessionId: Aest.getContext('sessionId')})
 })
 ```
+
+`Get result`
+
+```
+
+ PASS  src/main.test.js
+  ✓ loginByEmail Success Test (276ms)
+  ✓ loginByEmail Fail Test (164ms)
+  ✓ Get User Info (415ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       3 passed, 3 total
+Snapshots:   0 total
+Time:        2.516s, estimated 5s
+Ran all test suites.
+```
+
+# Api
+## Aest.format()
+## Aest.send()
+## Aest.setContext()
+## Aest.getContext()
+## Aest.emptyContext()
 
