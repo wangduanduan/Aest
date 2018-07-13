@@ -1,0 +1,7 @@
+/node_modules
+/logs/*.log
+/logs/*.gz
+/public/uploads
+.DS_Store
+/.vscode
+/src/test-data.js
