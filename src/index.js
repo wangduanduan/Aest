@@ -4,32 +4,36 @@ const Mustache = require('mustache')
 const _ = require('lodash')
 const AestDefaultConfig = require('./default.js')
 
-var aestContext = {}
+var shareData = {}
 
-function setContext (key, value) {
-  aestContext[key] = value
+function share (key, value) {
+  shareData[key] = value
 }
 
-function getContext (key) {
-  return aestContext[key]
+function getShare () {
+  return _.cloneDeep(shareData)
 }
 
-function emptyContext () {
-  aestContext = {}
-}
-
-function mergeConf (conf, context) {
+function _render (conf, context) {
   conf = JSON.stringify(conf)
   conf = Mustache.render(conf, context)
   return JSON.parse(conf)
 }
 
-function format (data, defaultConf = {}) {
-  defaultConf = _.merge(defaultConf, AestDefaultConfig)
+function _setDefault (defaultConf) {
+  let _conf = _.cloneDeep(AestDefaultConfig)
+  _.merge(_conf, defaultConf)
+  return _conf
+}
+
+function init (data, defaultConf = {}) {
+  defaultConf = _setDefault(defaultConf)
 
   Object.keys(data).forEach((key) => {
     if (key !== '$baseUrl') {
-      _.merge(defaultConf, data[key].req)
+      let _defaultConf = _.cloneDeep(defaultConf)
+      _.merge(_defaultConf, data[key].req)
+      data[key].req = _defaultConf
       data[key].req.url = data.$baseUrl + data[key].req.path
       delete data[key].req.path
     }
@@ -38,13 +42,17 @@ function format (data, defaultConf = {}) {
   return data
 }
 
-function send (conf, context) {
-  // console.log(111)
-  if (context) {
-    conf = mergeConf(conf, context)
-  }
+function _mergeSendConf (conf, context = {}) {
+  conf = _.cloneDeep(conf)
+  context = _.cloneDeep(context)
 
-  // console.log(conf)
+  let _conf = _.cloneDeep(shareData)
+  context = _.merge(_conf, context)
+  return _render(conf, context)
+}
+
+function send (conf, context = {}) {
+  conf = _mergeSendConf(conf, context)
 
   return new Promise(function (resolve, reject) {
     axios(conf.req)
@@ -74,5 +82,5 @@ function send (conf, context) {
 }
 
 module.exports = {
-  send, format, setContext, getContext, emptyContext
+  send, init, share, getShare, _mergeSendConf, _render
 }

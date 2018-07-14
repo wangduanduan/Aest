@@ -5,3 +5,4 @@
 .DS_Store
 /.vscode
 /src/test-data.js
+yarn-error.log
