@@ -20,7 +20,9 @@ npm i aester -S
 ## 4.1. 编写测试用例
 
 ```
-const Ae = require('../src/index.js')
+// filename 必须以 test.js结尾
+
+const Ae = require('aester')
 var testData = require('./test-data.js')
 
 // 初始化配置文件
@@ -121,6 +123,18 @@ module.exports = {
 }
 
 ```
+
+## 4.3. 运行测试用例
+
+在package.json加入
+
+```
+  "scripts": {
+    "test": "jest"
+  }
+```
+
+然后运行`npm test`
 
 # 5. 参看测试结果
 
