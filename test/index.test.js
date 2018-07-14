@@ -1,8 +1,19 @@
-/* global expect, test */
+/* global expect, test, beforeAll, afterAll */
 const Ae = require('../src/index.js')
+const app = require('./server.js')
+const serverPort = 3000
+var serverInstance = null
 var testData = require('./test-data.js')
 
 testData = Ae.init(testData)
+
+beforeAll(() => {
+  serverInstance = app.listen(serverPort)
+})
+
+afterAll(() => {
+  serverInstance.close()
+})
 
 test('Get User Info without sessionId', async () => {
   await expect(Ae.send(testData.getOneUser, {id: '1'})).rejects.toHaveProperty('status', 403)

@@ -23,7 +23,6 @@ app.post('/login', (req, res, next) => {
     email: 'wdd@cc.tt',
     password: '000'
   }
-  console.log(req.body)
   if (req.body.email === user.email && req.body.password === user.password) {
     res.status(200).json({sessionId: sessionId}).end()
   } else {
@@ -32,8 +31,8 @@ app.post('/login', (req, res, next) => {
 })
 
 app.use(function checkSessionId (req, res, next) {
-  console.log('check sessionId')
-  console.log(req.headers)
+  // console.log('check sessionId')
+  // console.log(req.headers)
   if (req.headers.sessionid !== sessionId) {
     res.sendStatus(403)
   } else {
@@ -69,4 +68,6 @@ app.delete('users/:id', (req, res, next) => {
   }
 })
 
-app.listen(3000)
+module.exports = app
+
+// app.listen(3000)

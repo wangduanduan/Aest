@@ -1,4 +1,10 @@
 # 1. Aest
+
+![](https://img.shields.io/badge/code_style-standard-brightgreen.svg) [![](https://img.shields.io/badge/node-%3E%3D8.0.0-brightgreen.svg)]() ![npm](https://img.shields.io/npm/v/aester.svg) ![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)
+
+
+
+
 功能强大的REST接口测试工具, Power By [Jest](https://jestjs.io/en/), [axios](https://github.com/axios/axios), [superstruct](https://github.com/ianstormtaylor/superstruct), [mustache](https://github.com/janl/mustache.js), [lodash](https://lodash.com/)
 
 # 2. 特点
@@ -300,6 +306,12 @@ resBodyStruct字段说明
 ```
 
 更多字段类型验证参考：https://github.com/ianstormtaylor/superstruct/blob/master/docs/reference.md
+
+# 测试Aester
+
+```
+npm test
+```
 
 
 

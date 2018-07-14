@@ -12,7 +12,7 @@ module.exports = {
       }
     },
     resBodyStruct: {
-      sessionId: 'number'
+      sessionId: 'string'
     }
   },
   getOneUser: {
