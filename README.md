@@ -1,5 +1,7 @@
 # 1. Aest
 
+![Travis](https://img.shields.io/travis/wangduanduan/Aest.svg)
+
 ![](https://img.shields.io/badge/code_style-standard-brightgreen.svg) [![](https://img.shields.io/badge/node-%3E%3D8.0.0-brightgreen.svg)]() ![npm](https://img.shields.io/npm/v/aester.svg) ![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
 
@@ -307,7 +309,7 @@ resBodyStruct字段说明
 
 更多字段类型验证参考：https://github.com/ianstormtaylor/superstruct/blob/master/docs/reference.md
 
-# 测试Aester
+# 8. 测试Aester
 
 ```
 npm test
