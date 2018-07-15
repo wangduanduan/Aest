@@ -3,6 +3,16 @@ const Ae = require('../src/index.js')
 var testData = require('./test-data.js')
 var testDataInit = require('./test-data-init.js')
 
+test('Ae validateStruct success', () => {
+  var result = Ae.validateStruct({name: 'wdd'}, {name: 'string'})
+  expect(result.length).toBe(2)
+})
+
+test('Ae validateStruct success', () => {
+  var result = Ae.validateStruct({name: 'wdd'}, {name: 'number'})
+  expect(result.length).toBe(1)
+})
+
 test('Ae _render()', () => {
   expect(Ae._render({name: '{{name}}', token: '{{token}}', addr: 'hh'}, {name: 'wdd', token: '123'}))
   .toEqual({name: 'wdd', token: '123', addr: 'hh'})

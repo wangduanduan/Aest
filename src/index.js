@@ -51,6 +51,18 @@ function _mergeSendConf (conf, context = {}) {
   return _render(conf, context)
 }
 
+function validateStruct (data, scheme) {
+  return struct(scheme).validate(data)
+}
+
+function _validateStruct (data, scheme, reject) {
+  let result = validateStruct(data, scheme)
+
+  if (result.length === 1) {
+    reject(result[0])
+  }
+}
+
 function send (conf, context = {}) {
   conf = _mergeSendConf(conf, context)
 
@@ -58,19 +70,11 @@ function send (conf, context = {}) {
     axios(conf.req)
     .then(function (res) {
       if (conf.resBodyStruct) {
-        let Scheme = struct(conf.resBodyStruct)
-        let result = Scheme.validate(res.data)
-        if (result.length === 1) {
-          reject(result[0])
-        }
+        _validateStruct(res.data, conf.resBodyStruct, reject)
       }
 
       if (conf.resHeadersStruct) {
-        let Scheme = struct(conf.resHeadersStruct)
-        let result = Scheme.validate(res.headers)
-        if (result.length === 1) {
-          reject(result[0])
-        }
+        _validateStruct(res.data, conf.resHeadersStruct, reject)
       }
 
       resolve(res.data)
@@ -82,5 +86,5 @@ function send (conf, context = {}) {
 }
 
 module.exports = {
-  send, init, share, getShare, _mergeSendConf, _render
+  send, init, share, getShare, _mergeSendConf, _render, validateStruct
 }

@@ -14,12 +14,14 @@
   },
   "scripts": {
     "test": "jest",
-    "test_index": "jest test/index.test.js",
-    "test_unit": "jest test/unit.test.js"
+    "test:index": "jest test/index.test.js",
+    "test:unit": "jest test/unit.test.js",
+    "test:report": "jest --reporters='jest-html-reporter'"
   },
   "devDependencies": {
     "cors": "^2.8.4",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "jest-html-reporter": "^2.4.1"
   },
   "keywords": [
     "request",
@@ -31,5 +33,6 @@
   ],
   "engines": {
     "node": ">=8.0.0"
-  }
+  },
+  "jest": {}
 }
