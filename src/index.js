@@ -4,6 +4,16 @@ const Mustache = require('mustache')
 const _ = require('lodash')
 const AestDefaultConfig = require('./default.js')
 
+const ReqScheme = struct({
+  method: 'string',
+  url: 'string',
+  headers: 'object',
+  data: 'any?',
+  params: 'object?',
+  resBodyStruct: 'object?',
+  resHeadersStruct: 'object?'
+})
+
 var shareData = {}
 
 function share (key, value) {
@@ -29,6 +39,10 @@ function _setDefault (defaultConf) {
 function init (data, defaultConf = {}) {
   defaultConf = _setDefault(defaultConf)
 
+  if (!data.$baseUrl) {
+    throw new Error('$baseUrl not exits')
+  }
+
   Object.keys(data).forEach((key) => {
     if (key !== '$baseUrl') {
       let _defaultConf = _.cloneDeep(defaultConf)
@@ -36,6 +50,7 @@ function init (data, defaultConf = {}) {
       data[key].req = _defaultConf
       data[key].req.url = data.$baseUrl + data[key].req.path
       delete data[key].req.path
+      ReqScheme(data[key].req)
     }
   })
 
@@ -55,15 +70,39 @@ function validateStruct (data, scheme) {
   return struct(scheme).validate(data)
 }
 
+function createError (result) {
+  var error = {
+    msg: [],
+    type: 'StructError'
+  }
+  result.errors.forEach((item) => {
+    error.msg.push(`Expected a value of type "${item.type}" for "${item.path[0]}" but received "${item.value}"`)
+  })
+
+  return error
+}
+
 function _validateStruct (data, scheme, reject) {
   let result = validateStruct(data, scheme)
 
   if (result.length === 1) {
-    reject(result[0])
+    reject(createError(result[0]))
+    // reject(result[0])
+    // throw result[0]
+  }
+}
+
+function _validateReq (req) {
+  var result = ReqScheme.validate(req)
+
+  if (result.length === 1) {
+    throw new Error('Req struct error, have you call Ae.init() before Ae.send()? ')
   }
 }
 
 function send (conf, context = {}) {
+  _validateReq(conf.req)
+
   conf = _mergeSendConf(conf, context)
 
   return new Promise(function (resolve, reject) {
@@ -86,5 +125,12 @@ function send (conf, context = {}) {
 }
 
 module.exports = {
-  send, init, share, getShare, _mergeSendConf, _render, validateStruct
+  send,
+  init,
+  share,
+  getShare,
+  validateStruct,
+  _mergeSendConf,
+  _render,
+  _validateReq
 }

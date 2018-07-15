@@ -36,27 +36,34 @@ var testData = require('./test-data.js')
 // 初始化配置文件
 testData = Ae.init(testData)
 
-// 没有sessionId作为头部信息时，会报403错误
-test('Get User Info without sessionId', async () => {
-  await expect(Ae.send(testData.getOneUser, {id: '1'})).rejects.toHaveProperty('status', 403)
+describe('4XX 5XX error response test', () => {
+  test('Get User Info without sessionId', async () => {
+    await expect(Ae.send(testData.getOneUser, {id: '1'})).rejects.toHaveProperty('status', 403)
+  })
+
+  test('loginByEmail Fail Test', async () => {
+    await expect(Ae.send(testData.loginByEmail, {password: '111'})).rejects.toHaveProperty('status', 401)
+  })
 })
 
-// 登录成功测试
-test('loginByEmail Success Test', async () => {
-  const data = await Ae.send(testData.loginByEmail, {password: '000'})
-  
-  // 将sessionId写入share, 提供给后面的测试用例使用
-  Ae.share('sessionId', data.sessionId)
+describe('2XX success response test', () => {
+  test('loginByEmail Success Test', async () => {
+    const data = await Ae.send(testData.loginByEmail, {password: '000'})
+    Ae.share('sessionId', data.sessionId)
+  })
+
+  test('Get User Info', async () => {
+    await Ae.send(testData.getOneUser, {id: '1'})
+  })
 })
 
-// 登录失败测试，密码错误，会返回401
-test('loginByEmail Fail Test', async () => {
-  await expect(Ae.send(testData.loginByEmail, {password: '111'})).rejects.toHaveProperty('status', 401)
-})
+describe('2XX success response with error body struct', () => {
+  test('StructError test', async () => {
+    var data = _.cloneDeep(testData.getOneUser)
+    data.resBodyStruct.test = 'number' // set a error struct
 
-// 获取用户信息测试
-test('Get User Info', async () => {
-  await Ae.send(testData.getOneUser, {id: '1'})
+    await expect(Ae.send(data, {id: '1'})).rejects.toHaveProperty('type', 'StructError')
+  })
 })
 ```
 
