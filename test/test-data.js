@@ -29,7 +29,7 @@ module.exports = {
       password: 'string',
       userName: 'string',
       likes: 'array',
-      isAdmin: 'boolean'
+      isAdmin: 'number'
     }
   },
   createOneUser: {

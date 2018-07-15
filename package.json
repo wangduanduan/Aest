@@ -13,7 +13,9 @@
     "superstruct": "^0.5.4"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "test_index": "jest test/index.test.js",
+    "test_unit": "jest test/unit.test.js"
   },
   "devDependencies": {
     "cors": "^2.8.4",
