@@ -4,11 +4,7 @@ var testData = require('./test-data.js')
 var testDataInit = require('./test-data-init.js')
 
 describe('util tool unit test', () => {
-  test('Ae validateStruct success', () => {
-    var result = Ae.validateStruct({name: 'wdd'}, {name: 'string'})
-    expect(result.length).toBe(2)
-  })
-
+  
   test('Ae validateStruct success', () => {
     var result = Ae.validateStruct({name: 'wdd'}, {name: 'string'})
     expect(result.length).toBe(2)
