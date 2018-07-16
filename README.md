@@ -151,6 +151,24 @@ module.exports = {
 
 然后运行`npm test`
 
+## 4.4. 生成html测试报告
+
+```
+yarn add jest-html-reporter -D
+```
+
+然后在package.json中加入如下字段
+
+```
+"test:report": "jest --reporters='jest-html-reporter'"
+```
+
+然后运行
+
+```
+npm run test:report
+```
+
 # 5. 参看测试结果
 
 ## 5.1. 正常测试结果
