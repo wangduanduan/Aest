@@ -48,7 +48,11 @@ function init (data, defaultConf = {}) {
       let _defaultConf = _.cloneDeep(defaultConf)
       _.merge(_defaultConf, data[key].req)
       data[key].req = _defaultConf
-      data[key].req.url = data.$baseUrl + data[key].req.path
+
+      if(!data[key].req.baseURL){
+        data[key].req.url = data.$baseUrl + data[key].req.path
+      }
+      
       delete data[key].req.path
       ReqScheme(data[key].req)
     }
