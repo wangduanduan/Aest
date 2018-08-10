@@ -5,6 +5,7 @@
 ![](https://img.shields.io/badge/code_style-standard-brightgreen.svg) [![](https://img.shields.io/badge/node-%3E%3D8.0.0-brightgreen.svg)]() ![npm](https://img.shields.io/npm/v/aester.svg) ![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
 
+![](http://p3alsaatj.bkt.clouddn.com/20180810131752_zpRRP5_Jietu20180810-130750.jpeg)
 
 
 功能强大的REST接口测试工具, Power By [Jest](https://jestjs.io/en/), [axios](https://github.com/axios/axios), [superstruct](https://github.com/ianstormtaylor/superstruct), [mustache](https://github.com/janl/mustache.js), [lodash](https://lodash.com/)
@@ -48,6 +49,8 @@ describe('4XX 5XX error response test', () => {
 
 describe('2XX success response test', () => {
   test('loginByEmail Success Test', async () => {
+    // 对于符合预期的正向测试，不需要使用expect, 如果响应状态码是400以上，或者响应体结构不符合预期，
+    // 该测试用例会自动失败
     const data = await Ae.send(testData.loginByEmail, {password: '000'})
     Ae.share('sessionId', data.sessionId)
   })
@@ -157,6 +160,7 @@ module.exports = {
 yarn add jest-html-reporter -D
 ```
 
+### 4.4.1. 方法1 
 然后在package.json中加入如下字段
 
 ```
@@ -167,6 +171,30 @@ yarn add jest-html-reporter -D
 
 ```
 npm run test:report
+```
+
+### 4.4.2. 方法2
+
+创建jest.config.js在项目根目录
+
+```
+module.exports = {
+  verbose: true,
+  testEnvironment: 'node',
+  reporters: [
+    'default',
+    ['./node_modules/jest-html-reporter', {
+      pageTitle: `operation api test ${process.env.testConfigEnv}`,
+      includeFailureMsg: true // 详细错误提示
+    }]
+  ]
+}
+```
+
+然后运行
+
+```
+npm test
 ```
 
 # 5. 参看测试结果
@@ -258,13 +286,15 @@ var conf = Ae.init(apiConfs)
 
 ## 6.2. Aest.send(apiConf, options)
 
-初始化配置文件
+发送请求。
+
+options会与share合并，然后将对应变量渲染到请求模板中。
 
 ```
 const Ae = require('aester')
 
 ...
-var conf = Ae.init(apiConfs)
+Ae.send(testData.getOneUser, {id: '1'}
 ```
 
 
@@ -297,6 +327,7 @@ var conf = Ae.getShare() // {token: '123123'}
 key | 必须？ | 说明
 --- | --- | ---
 $baseUrl | 是 | 请求baseUrl
+
 desc | 否 | 接口说明
 req | 是 | 请求对象
 req.method | 否 | 请求方法，默认get
